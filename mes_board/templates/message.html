@@ -1,0 +1,20 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+{% if messages %}
+
+<table width="100%" style="margin-top: 35px">
+    <tr>
+                <td><u>Заголовок</u></td>
+                <td><u>Текст объявления </u></td>
+    </tr>
+    <tr>
+                <td>{{ message.title}}</td>
+                <td>{{ message.content}}</td>
+    </tr>
+</table>
+
+{% else %}
+<h3>Нет публикаций</h3>
+{% endif %}
+{% endblock content %}

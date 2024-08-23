@@ -1,0 +1,25 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+messages
+{% endblock title %}
+
+{% block content %}
+<h1>Доска объявлений нашего MMORPG</h1>
+<p>Здесь вы можете узнать о последних новостях, обсуждениях и предложениях в нашем многопользовательском ролевом игровом проекте.</p>
+    {% if messages %}
+    <table width="100%" style="margin-top: 35px">
+            <tr>
+                <td><u>Заголовок</u></td>
+                <td><u>Текст объявления </u></td>
+            </tr>
+    {% for message in messages %}
+            <tr>
+                <td>{{ message.title}}</td>
+                <td>{{ message.content}}</td>
+            </tr>
+    {% endfor %}
+
+    {% endif %}
+{% endblock content %}
+        </table>
