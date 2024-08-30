@@ -1,7 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
 {% block content %}
-{% if messages %}
+{% if message %}
 
 <table width="100%" style="margin-top: 35px">
     <tr>
@@ -14,7 +14,5 @@
     </tr>
 </table>
 
-{% else %}
-<h3>Нет публикаций</h3>
 {% endif %}
 {% endblock content %}

@@ -63,6 +63,26 @@
   --bs-body-line-height: 1.5;
   --bs-body-color: #212529;
   --bs-body-bg: #fff;
+
+  /* внешние границы таблицы серого цвета толщиной 1px */
+table {
+   border: 1px solid black;
+}
+/* границы ячеек первого ряда таблицы */
+th {
+   border: 1px solid black;
+}
+/* границы ячеек тела таблицы */
+td {
+   border: 1px solid black;
+}
+
+/* задаст фиксированную ширину для таблицы */
+table {
+   width: 1300px;
+}
+
+
   --bs-border-width: 1px;
   --bs-border-style: solid;
   --bs-border-color: #dee2e6;

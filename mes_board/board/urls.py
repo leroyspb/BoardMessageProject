@@ -1,8 +1,8 @@
 from django.urls import path
 from . import views
-from .views import MessageList, profile_view
+from .views import MessageList, MessageDetail
 
 urlpatterns = [
     path('', MessageList.as_view()),
-    path('profile', profile_view, name='profile')
+    path('<int:pk>', MessageDetail.as_view()),
 ]

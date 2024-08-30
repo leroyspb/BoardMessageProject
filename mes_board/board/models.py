@@ -11,9 +11,10 @@ class Author(models.Model):
 
 class Message(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE, blank=True)
+    date = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=200)
     content = models.TextField()
-    media = models.FileField(upload_to='media/', blank=True)
+    media = models.FileField(upload_to='media/')
     related_name = 'messages',
 
     def __str__(self):
@@ -44,11 +45,17 @@ class Message(models.Model):
     category = models.CharField(max_length=2, choices=CATEGORIES, default=tanks)
 
 
+class UserResponse(models.Model):
+    author = models.OneToOneField(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+
+
 class Comment(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
-
 
 
 
