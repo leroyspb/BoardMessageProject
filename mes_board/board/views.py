@@ -24,17 +24,13 @@ class MessageDetail(DetailView):
 class MessageCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = ('message_create',)
     raise_exception = True
-    # Указываем нашу разработанную форму
     form_class = MessageForm
-
-    # модель
     model = Message
-    # и новый шаблон, в котором используется форма.
     template_name = 'message_create.html'
 
 
 class MessageUpdate(PermissionRequiredMixin, UpdateView):
-    permission_required = ('board.change_post',)
+    permission_required = ('board.change_message',)
     form_class = MessageForm
     model = Message
     template_name = 'message_edit.html'
@@ -44,10 +40,8 @@ class MessageDelete(PermissionRequiredMixin, DeleteView):
     permission_required = ('board.delete_message',)
     model = Message
     template_name = 'message_delete.html'
-    success_url = reverse_lazy('/')
+    success_url = reverse_lazy('message_list')
 
-    def get_success_url(self):
-        return reverse_lazy('/')
 
 
 

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -43,6 +44,9 @@ class Message(models.Model):
 
     ]
     category = models.CharField(max_length=2, choices=CATEGORIES, default=tanks)
+
+    def get_absolute_url(self):
+        return reverse('message_detail', args=[str(self.id)])
 
 
 class UserResponse(models.Model):
