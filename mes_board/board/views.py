@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from board.forms import MessageForm
 from board.models import Message
@@ -20,7 +21,7 @@ class MessageDetail(DetailView):
     queryset = Message.objects.all()
 
 
-class PostCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
+class MessageCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = ('message_create',)
     raise_exception = True
     # Указываем нашу разработанную форму
@@ -32,6 +33,21 @@ class PostCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'message_create.html'
 
 
+class MessageUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('board.change_post',)
+    form_class = MessageForm
+    model = Message
+    template_name = 'message_edit.html'
+
+
+class MessageDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('board.delete_message',)
+    model = Message
+    template_name = 'message_delete.html'
+    success_url = reverse_lazy('/')
+
+    def get_success_url(self):
+        return reverse_lazy('/')
 
 
 

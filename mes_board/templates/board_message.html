@@ -20,6 +20,16 @@ messages
 
                 <td>{{ message.title|truncatewords:5}}</td>
                 <td>{{ message.content|truncatewords:15}}</td>
+
+                   <td> {# А здесь доступ для каждой ссылки теперь будем проверять отдельно #}
+                    {% if perms.board.change_message %}
+            <a href="{% url 'message_edit' pk=message.id %}">Изменить</a>
+                    {% endif %}
+                    {% if perms.board.delete_message %}
+
+            <a href="{% url 'message_delete' message.id %}">Удалить</a>
+                {% endif %}
+                </td>
             </tr>
     {% endfor %}
         </table>

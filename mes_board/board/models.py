@@ -14,7 +14,7 @@ class Message(models.Model):
     date = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=200)
     content = models.TextField()
-    media = models.FileField(upload_to='media/')
+    message_media = models.FileField(upload_to='media/', blank=True, null=True)
     related_name = 'messages',
 
     def __str__(self):
