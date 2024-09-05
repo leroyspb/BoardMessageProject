@@ -8,23 +8,30 @@ messages
 <h1>Доска объявлений нашего MMORPG</h1>
 <p>Здесь вы можете узнать о последних новостях, обсуждениях и предложениях в нашем многопользовательском ролевом игровом проекте.</p>
 <hr>
+{% for m in messages %}
+<nav>
+            {% if perms.board.add_product %}
+        <a href="{% url 'message_create' %}"> Добавить объявление</a> |
+        {% endif %}
+                {% if perms.board.change_message %}
+        <a href="{% url 'message_edit' m.id %}"> Изменить </a> |
+        <a href="{% url 'message_delete' m.id %}">Удалить</a> |
+{% endif %}
+        <a href="{% url 'message_detail' pk=m.id %}"> Прочитать полностью </a>
+
+            <h3>{{ m.title|truncatewords:5 }}</h3>
+        <p>{{ m.content|truncatewords:20}}</p>
+        {% if not forloop.last %}
+</nav>
 
 <h1>{{ title }}</h1>
 
 <dl>
-    {% for m in messages %}
+
     <dt>
-        <h3>{{ m.title|truncatewords:5 }}</h3>
-        <p>{{ m.content|truncatewords:20}}</p>
-        {% if perms.board.add_product %}
-        <a href="{% url 'message_create' %}"> Добавить объявление</a>
-        {% endif %}
-        <a href="{% url 'message_detail' pk=m.id %}"> Прочитать полностью </a>
-        {% if perms.board.change_message %}
-        <a href="{% url 'message_edit' pk=m.id %}"> Изменить </a>
-        <a href="{% url 'message_delete' m.id %}">Удалить</a>
-{% endif %}
-        {% if not forloop.last %}
+
+
+
         <hr>
         {% endif %}
     </dt>
