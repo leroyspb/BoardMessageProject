@@ -11,7 +11,12 @@ class Author(models.Model):
 
 
 class Message(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, blank=True)
+    author = models.ForeignKey(
+        'auth.User',
+        related_name='message_owner',
+        on_delete=models.CASCADE,
+        verbose_name="Owner")
+
     date = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=200)
     content = models.TextField()
