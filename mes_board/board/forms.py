@@ -15,6 +15,17 @@ class MessageForm(forms.ModelForm):
 
         ]
 
+
+class CreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Message
+        fields = [
+            'title',
+            'content',
+
+        ]
+
     def clean(self):
         cleaned_data = super().clean()
         content = cleaned_data.get("content")

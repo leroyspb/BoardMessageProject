@@ -1,18 +1,12 @@
 {% extends 'flatpages/default.html' %}
 
+
+{% block title %}
+messages
+{% endblock title %}
+
 {% block content %}
-{% if message %}
+        <h3>{{ message.title }}</h3>
+        <p>{{ message.content }}</p>
 
-<table width="100%" style="margin-top: 35px">
-    <tr>
-                <td><u>Заголовок</u></td>
-                <td><u>Текст объявления </u></td>
-    </tr>
-    <tr>
-                <td>{{ message.title}}</td>
-                <td>{{ message.content}}</td>
-    </tr>
-</table>
-
-{% endif %}
 {% endblock content %}

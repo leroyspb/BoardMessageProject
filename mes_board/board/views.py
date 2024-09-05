@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from board.forms import MessageForm
+from board.forms import MessageForm, CreateForm
 from board.models import Message
 
 
@@ -24,9 +24,10 @@ class MessageDetail(DetailView):
 class MessageCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = ('message_create',)
     raise_exception = True
-    form_class = MessageForm
+    form_class = CreateForm
     model = Message
     template_name = 'message_create.html'
+
 
 
 class MessageUpdate(PermissionRequiredMixin, UpdateView):
