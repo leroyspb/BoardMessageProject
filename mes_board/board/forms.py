@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from board.models import Message
+from board.models import Message, Comment
 
 
 class MessageForm(forms.ModelForm):
@@ -23,6 +23,7 @@ class CreateForm(forms.ModelForm):
         fields = [
             'title',
             'content',
+            'author',
 
         ]
 
@@ -43,3 +44,11 @@ class CreateForm(forms.ModelForm):
         return cleaned_data
 
 
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = [
+            'text',
+
+        ]

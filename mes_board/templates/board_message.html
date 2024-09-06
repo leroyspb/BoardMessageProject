@@ -8,11 +8,15 @@ messages
 <h1>Доска объявлений нашего MMORPG</h1>
 <p>Здесь вы можете узнать о последних новостях, обсуждениях и предложениях в нашем многопользовательском ролевом игровом проекте.</p>
 <hr>
-{% for m in messages %}
-<nav>
+
             {% if perms.board.add_product %}
-        <a href="{% url 'message_create' %}"> Добавить объявление</a> |
+        <a href="{% url 'message_create' %}"> Добавить объявление</a>
         {% endif %}
+<br>
+{% for m in messages %}
+<br>
+<nav>
+
                 {% if perms.board.change_message %}
         <a href="{% url 'message_edit' m.id %}"> Изменить </a> |
         <a href="{% url 'message_delete' m.id %}">Удалить</a> |

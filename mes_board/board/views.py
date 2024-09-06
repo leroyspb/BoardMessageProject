@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
-from board.forms import MessageForm, CreateForm
-from board.models import Message
+from django.views.generic.edit import FormMixin
+from board.forms import MessageForm, CreateForm, CommentForm
+from board.models import Message, Comment
 
 
 class MessageList(LoginRequiredMixin, ListView):
@@ -14,12 +15,25 @@ class MessageList(LoginRequiredMixin, ListView):
     paginate_by = 3
 
 
-class MessageDetail(DetailView):
+class MessageDetail(FormMixin, DetailView):
     model = Message
     template_name = 'message.html'
     context_object_name = 'message'
     queryset = Message.objects.all()
+    form_class = CommentForm
 
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return HttpResponse('yes')
+        else:
+            return HttpResponse('no')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
 class MessageCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = ('message_create',)
@@ -27,7 +41,6 @@ class MessageCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     form_class = CreateForm
     model = Message
     template_name = 'message_create.html'
-
 
 
 class MessageUpdate(PermissionRequiredMixin, UpdateView):

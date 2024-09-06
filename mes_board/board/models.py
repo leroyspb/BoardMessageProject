@@ -15,7 +15,7 @@ class Message(models.Model):
         'auth.User',
         related_name='message_owner',
         on_delete=models.CASCADE,
-        verbose_name="Owner")
+        verbose_name="Владелец статьи")
 
     date = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=200)
@@ -62,9 +62,21 @@ class UserResponse(models.Model):
 
 
 class Comment(models.Model):
-    message = models.ForeignKey(Message, on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
+    class Meta:
+        db_table = 'comments'
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    message = models.ForeignKey(Message, on_delete=models.CASCADE,
+                                blank=True, null=True,
+                                related_name='comments_messages')
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               verbose_name="Автор комментария",
+                               blank=True, null=True)
+    text = models.TextField(verbose_name="Текст комментария", blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    moder = models.BooleanField(default=False)
+    status = models.BooleanField(verbose_name='Видимость статьи', default=False)
 
 
 
