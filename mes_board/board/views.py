@@ -25,15 +25,18 @@ class MessageDetail(FormMixin, DetailView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
+            # print(self.get_form())
             return HttpResponse('yes')
         else:
             return HttpResponse('no')
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
+        self.object.message = self.get_object()
         self.object.author = self.request.user
         self.object.save()
         return super().form_valid(form)
+
 
 class MessageCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     permission_required = ('message_create',)

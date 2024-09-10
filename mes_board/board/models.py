@@ -75,7 +75,6 @@ class Comment(models.Model):
                                blank=True, null=True)
     text = models.TextField(verbose_name="Текст комментария", blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    moder = models.BooleanField(default=False)
     status = models.BooleanField(verbose_name='Видимость статьи', default=False)
 
 
