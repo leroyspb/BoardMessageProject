@@ -8,5 +8,15 @@ messages
 {% block content %}
         <h3>{{ message.title }}</h3>
         <p>{{ message.content }}</p>
+<p>Комментарии</p>
+
+<hr>
+<br>
+<p> Добавить комментарий</p>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
 
 {% endblock content %}

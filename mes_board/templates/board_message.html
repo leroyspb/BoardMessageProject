@@ -1,22 +1,37 @@
 {% extends 'flatpages/default.html' %}
+{% load custom_extras %}
+{% load custom_filters %}
+{% load custom_tags %}
 
 {% block title %}
 messages
 {% endblock title %}
 
 {% block content %}
-<h1>Доска объявлений нашего MMORPG</h1>
-<p>Здесь вы можете узнать о последних новостях, обсуждениях и предложениях в нашем многопользовательском ролевом игровом проекте.</p>
+<h1>Доска Героев нашей MMORPG</h1>
+    <h3>{{ filterset.qs.count }} героев создано</h3>
+
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+        <input type="submit" value="Найти" />
+    </form>
 <hr>
+<p>Здесь вы можете узнать о новых героях, обсуждениях и предложениях в нашем многопользовательском ролевом игровом проекте.</p>
+<hr>
+
+    {% if perms.board.add_message %}
+        <a href="{% url 'message_create' %}"> Добавить героя</a>
+    {% endif %}
+
+<br>
 {% for m in messages %}
+<br>
 <nav>
-            {% if perms.board.add_product %}
-        <a href="{% url 'message_create' %}"> Добавить объявление</a> |
-        {% endif %}
-                {% if perms.board.change_message %}
+
+    {% if perms.board.change_message %}
         <a href="{% url 'message_edit' m.id %}"> Изменить </a> |
         <a href="{% url 'message_delete' m.id %}">Удалить</a> |
-{% endif %}
+    {% endif %}
         <a href="{% url 'message_detail' pk=m.id %}"> Прочитать полностью </a>
 
             <h3>{{ m.title|truncatewords:5 }}</h3>

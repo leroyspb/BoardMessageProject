@@ -3,20 +3,21 @@ from django.db import models
 from django.urls import reverse
 
 
-class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'{self.user}'
-
-
 class Message(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, blank=True)
-    date = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=200)
+    author = models.ForeignKey(
+        User,
+        related_name='message_owner',
+        on_delete=models.CASCADE,
+        verbose_name="Владелец статьи")
+
+    date_create = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(verbose_name='Заголовок', max_length=200)
     content = models.TextField()
-    message_media = models.FileField(upload_to='media/', blank=True, null=True)
-    related_name = 'messages',
+    message_media = models.FileField(verbose_name='Добавление медиафайлов',
+                                     upload_to='media/', blank=True, null=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def __str__(self):
         return f'{self.title}: {self.content[:50]}'
@@ -43,23 +44,21 @@ class Message(models.Model):
         (spell_masters, 'Мастера заклинаний'),
 
     ]
-    category = models.CharField(max_length=2, choices=CATEGORIES, default=tanks)
-
-    def get_absolute_url(self):
-        return reverse('message_detail', args=[str(self.id)])
+    category = models.CharField(verbose_name='Категория',
+                                max_length=2,
+                                choices=CATEGORIES, default=tanks)
 
 
 class UserResponse(models.Model):
-    author = models.OneToOneField(User, on_delete=models.CASCADE)
-    text = models.TextField()
-    message = models.ForeignKey(Message, on_delete=models.CASCADE)
-    status = models.BooleanField(default=False)
-
-
-class Comment(models.Model):
-    message = models.ForeignKey(Message, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
+    text = models.TextField(verbose_name='Текст')
+    msg = models.TextField(default="Сообщений пока нет")
+    status = models.BooleanField(default=False)
+    add = models.ForeignKey(Message, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Response for {self.add.title} by {self.user.username}"
 
 
 
