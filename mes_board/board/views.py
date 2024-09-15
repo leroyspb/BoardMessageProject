@@ -17,7 +17,7 @@ from .tasks import respond_send_email, respond_accept_send_email
 
 class MessageList(ListView):
     model = Message
-    ordering = '-date'
+    ordering = '-date_create'
     template_name = 'board_message.html'
     context_object_name = 'messages'
     paginate_by = 3
