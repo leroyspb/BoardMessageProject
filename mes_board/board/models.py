@@ -8,11 +8,11 @@ class Message(models.Model):
         User,
         related_name='message_owner',
         on_delete=models.CASCADE,
-        verbose_name="Владелец статьи")
+        verbose_name="Создатель героя")
 
     date_create = models.DateTimeField(auto_now_add=True)
     title = models.CharField(verbose_name='Заголовок', max_length=200)
-    content = models.TextField()
+    content = models.TextField(blank=True, null=True)
     message_media = models.FileField(verbose_name='Добавление медиафайлов',
                                      upload_to='media/', blank=True, null=True)
 

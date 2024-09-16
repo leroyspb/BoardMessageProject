@@ -40,7 +40,7 @@ class IndexView(ListView):
     context_object_name = 'messages'
 
 
-class MessageDetail(FormMixin, DetailView):
+class MessageDetail(DetailView):
     model = Message
     template_name = 'message.html'
     context_object_name = 'message'
@@ -50,7 +50,7 @@ class MessageDetail(FormMixin, DetailView):
         mes_id = self.kwargs.get('pk')
         context['respond'] = "Откликнулся" if UserResponse.objects.filter(
             author=self.request.user,
-            post_id=mes_id) else "Мое_объявление" \
+            id=mes_id) else "Мое_объявление" \
             if self.request.user == self.get_object().author else None
 
         return context
@@ -81,7 +81,6 @@ class MessageCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     model = Message
     template_name = 'message_create.html'
 
-    @login_required
     def form_valid(self, form):
         form.instance.author = self.request.user  # Устанавливаем автора
         return super().form_valid(form)
@@ -182,7 +181,6 @@ class ResponseList(LoginRequiredMixin, ListView):
         return self.get(request, *args, **kwargs)
 
 
-@login_required
 def response_accept(request, **kwargs):
     if request.user.is_authenticated:
         response = UserResponse.objects.get(id=kwargs.get('pk'))
@@ -194,7 +192,6 @@ def response_accept(request, **kwargs):
         return HttpResponseRedirect('/accounts/login')
 
 
-@login_required
 def response_delete(request, **kwargs):
     if request.user.is_authenticated:
         response = UserResponse.objects.get(id=kwargs.get('pk'))

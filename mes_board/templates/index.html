@@ -4,11 +4,11 @@
 
 {% block content %}
     <br><br>
-    {% if posts %}
-        {% for post in posts %}
-            <a href="/post/{{ post.id }}" style="font-size: 20px;"><b>{{ post.title }}</b></a><br>
-            <span style="font-size: 12px;"><b>Автор:  {{ post.author }} |
-                Дата публикации: {{ post.dateCreation|date:'d.M.Y' }} г.</b></span><br><br>
+    {% if messages %}
+        {% for message in messages %}
+            <a href="/message/{{ message.id }}" style="font-size: 20px;"><b>{{ message.title }}</b></a><br>
+            <span style="font-size: 12px;"><b>Автор:  {{ message.author }} |
+                Дата публикации: {{ message.date_create|date:'d.M.Y' }} г.</b></span><br><br>
 
 <form enctype="multipart/form-data" method="post">
   {% csrf_token %}
@@ -16,8 +16,8 @@
   <button type="submit">Upload</button>
 </form>
 
-{% if img_obj %}
-  <h3>Succesfully uploaded : {{img_obj.title}}</h3>
+{% if cont_obj %}
+  <h3>Succesfully uploaded : {{cont_obj.title}}</h3>
   <img src="{{ cont_obj.message_media.url}}" alt="connect" style="max-height:300px">
 {% endif %}
 
