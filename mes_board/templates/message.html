@@ -2,21 +2,36 @@
 
 
 {% block title %}
-messages
+message.title
 {% endblock title %}
 
 {% block content %}
-        <h3>{{ message.title }}</h3>
-        <p>{{ message.content }}</p>
-<p>Комментарии</p>
+    <br><br>
+        <h2>{{ message.title }}</h2>
+        <span>{{ message.content }}<br></span>
+<hr>
+    <span>| Автор: {{ message.author }}</span>
+    <span>| Категория героя: {{ message.get_category_display }}</span>
+    <span>| Дата создания: {{ message.date_create|date:'d-M-Y H:i' }}</span>
 
+    <a class="btn btn-secondary" href="{% url 'index' %}" role="button">Закрыть</a>
+    <a class="btn btn-secondary" href="{% url 'message_edit' message.id %}" role="button">Редактировать</a>
+    <a class="btn btn-danger" href="{% url 'message_delete' message.id %}" role="button">Удалить</a>
+    <br><br>
 <hr>
 <br>
-<p> Добавить комментарий</p>
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Сохранить</button>
-</form>
+
+    {% if user.is_authenticated %}
+    <br><br>
+        {% if respond == "Откликнулся" %}
+            <span style="color:red">Вы откликнулись на это объявление.</span><br>
+            <a href="{% url 'responses' %}">Посмотреть свои отклики</a>
+        {% elif respond == "Мое_объявление" %}
+            <span style="color:red">Вы не можете откликнуться на свое объявление.</span><br>
+        {% else %}
+            <a class="btn btn-secondary" href="{% url 'respond' message.id %}" role="button">Откликнуться</a>
+        {% endif %}
+    {% endif %}
+    <br><br>
 
 {% endblock content %}

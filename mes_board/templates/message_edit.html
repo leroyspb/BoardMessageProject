@@ -1,11 +1,12 @@
 {% extends 'flatpages/default.html' %}
 
 {% block content %}
-<h1>Объявление</h1>
+<h1>Изменение описания героя</h1>
 <hr>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    {{ form.media }}
     {{ form.as_p }}
-    <input type="submit" value="Save" />
-</form>
+    <input class="btn btn-secondary" type="submit" value="Сохранить">
+</form><br>
 {% endblock content %}

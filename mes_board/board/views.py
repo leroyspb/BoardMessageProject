@@ -36,7 +36,7 @@ class MessageList(ListView):
 
 class IndexView(ListView):
     model = Message
-    template_name = 'default.html'
+    template_name = 'index.html'
     context_object_name = 'messages'
 
 

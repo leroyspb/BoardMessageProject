@@ -17,7 +17,7 @@ class MessageFilter(django_filters.FilterSet):
     )
 
     created_at_after = django_filters.DateTimeFilter(
-        field_name='created_at',
+        field_name='date_create',
         lookup_expr='gt',
         label='Дата',
         widget=forms.DateTimeInput(

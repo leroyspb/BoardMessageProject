@@ -20,7 +20,7 @@ class Message(models.Model):
         super().__init__(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.title}: {self.content[:50]}'
+        return self.title
 
     tanks = 'TN'
     hills = 'HL'
@@ -47,6 +47,10 @@ class Message(models.Model):
     category = models.CharField(verbose_name='Категория',
                                 max_length=2,
                                 choices=CATEGORIES, default=tanks)
+
+    def get_absolute_url(self):
+        """Получение абсолютного URL-адреса конкретной страницы сведений о герое."""
+        return reverse('message_detail', args=[str(self.pk)])
 
 
 class UserResponse(models.Model):

@@ -50,6 +50,7 @@ class CreateForm(forms.ModelForm):
             'title',
             'content',
             'author',
+            'message_media',
 
         ]
 
