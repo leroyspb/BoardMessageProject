@@ -18,7 +18,7 @@
 
 {% if cont_obj %}
   <h3>Succesfully uploaded : {{cont_obj.title}}</h3>
-  <img src="{{ cont_obj.message_media.url}}" alt="connect" style="max-height:300px">
+  <img src="{{ cont_obj.files_upload.url}}" alt="connect" style="max-height:300px">
 {% endif %}
 
         {% endfor %}

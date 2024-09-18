@@ -56,7 +56,7 @@ class MessageDetail(DetailView):
         return context
 
 
-def image_upload_view(request):
+def message_media(request):
     # Здесь обрабатываем файлы, загруженные пользователями
     if request.method == 'POST':
         form = MessageForm(request.POST, request.FILES)
@@ -109,28 +109,17 @@ class MessageDelete(PermissionRequiredMixin, DeleteView):
     raise_exception = True
 
 
-class CommentDetail(DetailView):
+class ResponseDelete(LoginRequiredMixin, DeleteView):
     model = UserResponse
-    template_name = 'comment_detail.html'
-    context_object_name = 'comment'
+    template_name = 'response_delete.html'
+    success_url = reverse_lazy('responses')
 
 
-class CommentDelete(LoginRequiredMixin, DeleteView):
+class ResponseCreate(PermissionRequiredMixin, CreateView):
+    form_class = RespondForm
     model = UserResponse
-    template_name = 'comment_delete.html'
-    success_url = reverse_lazy('message')
-
-
-class CommentEdit(LoginRequiredMixin, UpdateView):
-    model = UserResponse
-    template_name = 'comment_edit.html'
-    success_url = reverse_lazy('message')
-
-
-class AddComment(PermissionRequiredMixin, CreateView):
-    model = UserResponse
-    template_name = 'add_comment.html'
-    success_url = reverse_lazy('message')
+    template_name = 'response_create.html'
+    success_url = reverse_lazy('responses')
 
 
 class ResponseList(LoginRequiredMixin, ListView):
@@ -187,3 +176,9 @@ def send_notification(user, application):
     # Реализация уведомления
     pass
 
+
+def response_status_update(request, pk):
+    resp = UserResponse.objects.get(pk=pk)
+    resp.status = True
+    resp.save()
+    return redirect(reverse_lazy('response'))

@@ -1,9 +1,21 @@
 {% extends 'flatpages/default.html' %}
 
+{% block title %}
+responses
+{% endblock title %}
+
+
 {% block content %}
 <h2>Мои отклики</h2>
 <hr>
-{% if response %}
+
+<form action="" method="get">
+    {{ filterset.form.as_p }}
+    <button type="submit">Поиск</button>
+</form>
+
+
+{% if responses %}
 <table>
     <thead>
         <tr>
@@ -16,9 +28,18 @@
         {% for response in responses %}
         <tr>
             <td>{{ response.author }}</td>
-            <td>{{ response.text }}</td>
+            <td>{{ response.text|truncatechars:20 }}</td>
             <td>{{ response.status.accepted|yesno:"Принят,Не принят" }}</td>
+        <td style="width: 200px"><button type="submit"><a href={% url 'response_delete' re.id%}> Удалить </a></button></td>
+        {% if re.status == False %}
+            <td style="width: 250px"><button type="submit"><a href={% url 'response_status' re.id %}>Принять</a></button> </td>
+            {% else %}
+            <td style="width: 250px">Отклик принят!</td>
+            {% endif %}
         </tr>
+        {% endfor %}
+    </table>
+
         {% endfor %}
     </tbody>
 </table>
