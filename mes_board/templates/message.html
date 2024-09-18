@@ -2,21 +2,21 @@
 
 
 {% block title %}
-message.title
+messages.title
 {% endblock title %}
 
 {% block content %}
     <br><br>
-        <h2>{{ message.title }}</h2>
-        <span>{{ message.content }}<br></span>
+        <h2>{{ messages.title }}</h2>
+        <span>{{ messages.content }}<br></span>
 <hr>
-    <span>| Автор: {{ message.author }}</span>
-    <span>| Категория героя: {{ message.get_category_display }}</span>
-    <span>| Дата создания: {{ message.date_create|date:'d-M-Y H:i' }}</span>
+    <span>| Автор: {{ messages.author }}</span>
+    <span>| Категория героя: {{ messages.get_category_display }}</span>
+    <span>| Дата создания: {{ messages.date_create|date:'d-M-Y H:i' }}</span>
 
     <a class="btn btn-secondary" href="{% url 'index' %}" role="button">Закрыть</a>
-    <a class="btn btn-secondary" href="{% url 'message_edit' message.id %}" role="button">Редактировать</a>
-    <a class="btn btn-danger" href="{% url 'message_delete' message.id %}" role="button">Удалить</a>
+    <a class="btn btn-secondary" href="{% url 'message_edit' messages.id %}" role="button">Редактировать</a>
+    <a class="btn btn-danger" href="{% url 'message_delete' messages.id %}" role="button">Удалить</a>
     <br><br>
 <hr>
 <br>
@@ -29,7 +29,7 @@ message.title
         {% elif respond == "Мое_объявление" %}
             <span style="color:red">Вы не можете откликнуться на свое объявление.</span><br>
         {% else %}
-            <a class="btn btn-secondary" href="{% url 'respond' message.id %}" role="button">Откликнуться</a>
+            <a class="btn btn-secondary" href="{% url 'respond' add.id %}" role="button">Откликнуться</a>
         {% endif %}
     {% endif %}
     <br><br>

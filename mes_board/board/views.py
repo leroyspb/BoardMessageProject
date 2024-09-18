@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 
-from board.filters import MessageFilter
+from board.filters import MessageFilter, ResponseFilter
 from board.forms import MessageForm, CreateForm, RespondForm
 from board.models import Message, UserResponse
 from .tasks import respond_send_email, respond_accept_send_email
@@ -43,14 +43,14 @@ class IndexView(ListView):
 class MessageDetail(DetailView):
     model = Message
     template_name = 'message.html'
-    context_object_name = 'message'
+    context_object_name = 'messages'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        mes_id = self.kwargs.get('pk')
+        message_id = self.kwargs.get('pk')
         context['respond'] = "Откликнулся" if UserResponse.objects.filter(
             author=self.request.user,
-            id=mes_id) else "Мое_объявление" \
+            id=message_id) else "Мое_объявление" \
             if self.request.user == self.get_object().author else None
 
         return context
@@ -134,51 +134,20 @@ class AddComment(PermissionRequiredMixin, CreateView):
 
 
 class ResponseList(LoginRequiredMixin, ListView):
+    form_class = RespondForm
     model = UserResponse
     template_name = 'responses.html'
     context_object_name = 'responses'
 
     def get_context_data(self, **kwargs):
-        context = super(UserResponse, self).get_context_data(**kwargs)
-        global title
-        """
-        Далее в условии - если пользователь попал на страницу через ссылку из письма, в которой содержится
-        ID поста для фильтра - фильтр работает по этому ID
-        """
-        if self.kwargs.get('pk') and Message.objects.filter(
-                id=self.kwargs.get('pk')).exists():
-            title = str(Message.objects.get(
-                id=self.kwargs.get('pk')).title)
-            print(title)
-        context['form'] = RespondForm(
-            self.request.user,
-            initial={'title': title})
-        context['title'] = title
-        if title:
-            message_id = Message.objects.get(title=title)
-            context['filter_responses'] = list(
-                UserResponse.objects.filter(
-                    message_id=message_id).order_by('-created_at'))
-            context['response_message_id'] = message_id.id
-        else:
-            context['filter_responses'] = list(
-                UserResponse.objects.filter(
-                    message_id__author_id=self.request.user).order_by('-created_at'))
-        context['myresponses'] = list(
-            UserResponse.objects.filter(
-                author_id=self.request.user).order_by('-created_at'))
+        context = super().get_context_data(**kwargs)
+        context['filterset'] = self.filterset
         return context
 
-    def post(self, request, *args, **kwargs):
-        global title
-        title = self.request.POST.get('title')
-        """
-        Далее в условии - При событии POST (если в пути открытой страницы есть ID) - нужно перезайти уже без этого ID
-        чтобы фильтр отрабатывал запрос уже из формы, так как ID, если он есть - приоритетный 
-        """
-        if self.kwargs.get('pk'):
-            return HttpResponseRedirect('/responses')
-        return self.get(request, *args, **kwargs)
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(message__author=self.request.user)
+        self.filterset = ResponseFilter(self.request.GET, queryset, request=self.request.user.id)
+        return self.filterset.qs
 
 
 def response_accept(request, **kwargs):
@@ -217,3 +186,4 @@ class AcceptResponseView(LoginRequiredMixin, View):
 def send_notification(user, application):
     # Реализация уведомления
     pass
+

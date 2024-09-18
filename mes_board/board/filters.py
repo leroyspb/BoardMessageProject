@@ -1,6 +1,6 @@
 import django_filters
 from django import forms
-from .models import Message
+from .models import Message, UserResponse
 
 
 class MessageFilter(django_filters.FilterSet):
@@ -30,3 +30,14 @@ class MessageFilter(django_filters.FilterSet):
         model = Message  # Модель для фильтрации
         fields = ['title', 'category', 'created_at_after']
 
+
+class ResponseFilter(django_filters.FilterSet):
+
+    def __init__(self, *args, **kwargs):
+        super(ResponseFilter, self).__init__(*args, **kwargs)
+        self.filters['message'].queryset = Message.objects.filter(author_id=kwargs['request'])
+        self.filters['message'].label = 'поиск по описанию героя'
+
+    class Meta:
+        model = UserResponse
+        fields = ('text',)

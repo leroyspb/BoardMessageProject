@@ -12,7 +12,7 @@ class Message(models.Model):
 
     date_create = models.DateTimeField(auto_now_add=True)
     title = models.CharField(verbose_name='Заголовок', max_length=200)
-    content = models.TextField(blank=True, null=True)
+    content = models.TextField(blank=True, null=True, verbose_name="Описание героя")
     message_media = models.FileField(verbose_name='Добавление медиафайлов',
                                      upload_to='media/', blank=True, null=True)
 
@@ -21,6 +21,10 @@ class Message(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = 'Герой'
+        verbose_name_plural = 'Герои'
 
     tanks = 'TN'
     hills = 'HL'
@@ -59,13 +63,17 @@ class UserResponse(models.Model):
     msg = models.TextField(default="Сообщений пока нет")
     status = models.BooleanField(default=False)
     add = models.ForeignKey(Message, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата отклика')
 
     def __str__(self):
-        return f"Response for {self.add.title} by {self.user.username}"
+        return f'{self.author}: {self.text}'
+
+    class Meta:
+        verbose_name = 'Отклик'
+        verbose_name_plural = 'Отклики'
 
 
-
-
-
+class Subscription(models.Model):
+    """Модель подписки на обновления"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
