@@ -34,12 +34,6 @@ class MessageList(ListView):
         return context
 
 
-class IndexView(ListView):
-    model = Message
-    template_name = 'index.html'
-    context_object_name = 'messages'
-
-
 class MessageDetail(DetailView):
     model = Message
     template_name = 'message.html'
@@ -65,12 +59,12 @@ def message_media(request):
             # Получаем текущий объект экземпляра для отображения в шаблоне
             cont_obj = form.instance
             return render(request,
-                          'index.html',
+                          'message.html',
                           {'form': form, 'cont_obj': cont_obj})
     else:
         form = MessageForm()
     return render(request,
-                  'index.html',
+                  'message.html',
                   {'form': form})
 
 
@@ -116,10 +110,11 @@ class ResponseDelete(LoginRequiredMixin, DeleteView):
 
 
 class ResponseCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('board.create_response',)
     form_class = RespondForm
     model = UserResponse
     template_name = 'response_create.html'
-    success_url = reverse_lazy('responses')
+    success_url = '/responses/'
 
 
 class ResponseList(LoginRequiredMixin, ListView):
@@ -134,47 +129,47 @@ class ResponseList(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        queryset = super().get_queryset().filter(message__author=self.request.user)
+        queryset = super().get_queryset().filter(add__author=self.request.user)
         self.filterset = ResponseFilter(self.request.GET, queryset, request=self.request.user.id)
         return self.filterset.qs
 
 
-def response_accept(request, **kwargs):
-    if request.user.is_authenticated:
-        response = UserResponse.objects.get(id=kwargs.get('pk'))
-        response.status = True
-        response.save()
-        respond_accept_send_email.delay(response_id=response.id)
-        return HttpResponseRedirect('/responses')
-    else:
-        return HttpResponseRedirect('/accounts/login')
+# def response_accept(request, **kwargs):
+#     if request.user.is_authenticated:
+#         response = UserResponse.objects.get(id=kwargs.get('pk'))
+#         response.status = True
+#         response.save()
+#         respond_accept_send_email.delay(response_id=response.id)
+#         return HttpResponseRedirect('/responses')
+#     else:
+#         return HttpResponseRedirect('/accounts/login')
 
 
-def response_delete(request, **kwargs):
-    if request.user.is_authenticated:
-        response = UserResponse.objects.get(id=kwargs.get('pk'))
-        response.delete()
-        return HttpResponseRedirect('/responses')
-    else:
-        return HttpResponseRedirect('/accounts/login')
+# def response_delete(request, **kwargs):
+#     if request.user.is_authenticated:
+#         response = UserResponse.objects.get(id=kwargs.get('pk'))
+#         response.delete()
+#         return HttpResponseRedirect('/responses')
+#     else:
+#         return HttpResponseRedirect('/accounts/login')
 
 
-class AcceptResponseView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        application = get_object_or_404(UserResponse, id=pk)
-        application.accepted = True
-        application.save()
+# class AcceptResponseView(LoginRequiredMixin, View):
+#     def post(self, request, pk):
+#         application = get_object_or_404(UserResponse, id=pk)
+#         application.accepted = True
+#         application.save()
+#
+#         # Уведомление пользователя, который оставил отклик
+#         send_notification(application.user, application)
+#
+#         messages.success(request, "Отклик принят.")
+#         return redirect('applications_list')
 
-        # Уведомление пользователя, который оставил отклик
-        send_notification(application.user, application)
 
-        messages.success(request, "Отклик принят.")
-        return redirect('applications_list')
-
-
-def send_notification(user, application):
-    # Реализация уведомления
-    pass
+# def send_notification(user, application):
+#     # Реализация уведомления
+#     pass
 
 
 def response_status_update(request, pk):

@@ -62,7 +62,7 @@ class UserResponse(models.Model):
     text = models.TextField(verbose_name='Текст')
     msg = models.TextField(default="Сообщений пока нет")
     status = models.BooleanField(default=False)
-    add = models.ForeignKey(Message, on_delete=models.CASCADE)
+    add = models.ForeignKey(Message, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата отклика')
 
     def __str__(self):

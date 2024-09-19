@@ -76,6 +76,7 @@ class RespondForm(forms.ModelForm):
     class Meta:
         model = UserResponse
         fields = [
+            'author',
             'text',
 
         ]

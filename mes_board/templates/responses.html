@@ -25,11 +25,11 @@ responses
         </tr>
     </thead>
     <tbody>
-        {% for response in responses %}
+        {% for re in responses %}
         <tr>
-            <td>{{ response.author }}</td>
-            <td>{{ response.text|truncatechars:20 }}</td>
-            <td>{{ response.status.accepted|yesno:"Принят,Не принят" }}</td>
+            <td>{{ re.author }}</td>
+            <td>{{ re.text|truncatechars:20 }}</td>
+            <td>{{ re.status.accepted|yesno:"Принят,Не принят" }}</td>
         <td style="width: 200px"><button type="submit"><a href={% url 'response_delete' re.id%}> Удалить </a></button></td>
         {% if re.status == False %}
             <td style="width: 250px"><button type="submit"><a href={% url 'response_status' re.id %}>Принять</a></button> </td>
@@ -39,8 +39,8 @@ responses
         </tr>
         {% endfor %}
     </table>
-
-        {% endfor %}
+{% else %}
+    <h2>Откликов нет!</h2>
+{% endif %}
     </tbody>
-</table>
 {% endblock %}
