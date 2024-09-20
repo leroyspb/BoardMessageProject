@@ -35,9 +35,9 @@ class ResponseFilter(django_filters.FilterSet):
 
     def __init__(self, *args, **kwargs):
         super(ResponseFilter, self).__init__(*args, **kwargs)
-        self.filters['text'].queryset = Message.objects.filter(author_id=kwargs['request'])
-        self.filters['text'].label = 'поиск по описанию героя'
+        self.filters['author'].queryset = Message.objects.filter(author_id=kwargs['request'])
+        self.filters['author'].label = 'поиск по описанию героя'
 
     class Meta:
         model = UserResponse
-        fields = ('text',)
+        fields = ('text', 'author', )

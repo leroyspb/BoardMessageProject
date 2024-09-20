@@ -24,7 +24,7 @@ messages.title
     <br><br>
         {% if respond == "Откликнулся" %}
             <span style="color:red">Вы откликнулись на это объявление.</span><br>
-            <a href="{% url 'response' %}">Посмотреть свои отклики</a>
+            <a href="{% url 'responses' %}">Посмотреть свои отклики</a>
         {% elif respond == "Мое_объявление" %}
             <span style="color:red">Вы не можете откликнуться на свое объявление.</span><br>
         {% else %}

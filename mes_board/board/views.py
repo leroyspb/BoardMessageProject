@@ -106,7 +106,7 @@ class MessageDelete(PermissionRequiredMixin, DeleteView):
 class ResponseDelete(LoginRequiredMixin, DeleteView):
     model = UserResponse
     template_name = 'response_delete.html'
-    success_url = reverse_lazy('responses')
+    success_url = '/responses/'
 
 
 class ResponseCreate(PermissionRequiredMixin, CreateView):
@@ -116,12 +116,19 @@ class ResponseCreate(PermissionRequiredMixin, CreateView):
     template_name = 'response_create.html'
     success_url = '/responses/'
 
+    def form_valid(self, form):
+        response = form.save(commit=False)
+        response.author = self.request.user
+        response.save()
+        return super().form_valid(form)
+
 
 class ResponseList(LoginRequiredMixin, ListView):
     form_class = RespondForm
     model = UserResponse
     template_name = 'responses.html'
     context_object_name = 'responses'
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -176,4 +183,4 @@ def response_status_update(request, pk):
     resp = UserResponse.objects.get(pk=pk)
     resp.status = True
     resp.save()
-    return redirect(reverse_lazy('response'))
+    return redirect(reverse_lazy('responses'))
