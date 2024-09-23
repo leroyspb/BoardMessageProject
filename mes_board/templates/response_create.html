@@ -1,7 +1,6 @@
 {% extends 'flatpages/default.html' %}							
 							
 {% block content %}
-{% if perms.board.create_response %}
 <h1>Создать отклик</h1>
 <hr>							
 <form action="" method="post">							
@@ -9,5 +8,4 @@
     {{ form.as_p }}							
     <input type="submit" value="Откликнутся" />
 </form>
-{% endif %}
-{% endblock content %}	
+{% endblock content %}

@@ -76,11 +76,10 @@ class RespondForm(forms.ModelForm):
     class Meta:
         model = UserResponse
         fields = [
-            'author',
             'text',
 
         ]
 
     def __init__(self, *args, **kwargs):
         super(RespondForm, self).__init__(*args, **kwargs)
-        self.fields['text'].label = "Описание отклика:"
+        self.fields['text'].label = "Текст отклика:"

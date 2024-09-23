@@ -10,7 +10,7 @@ class Message(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Создатель героя")
 
-    date_create = models.DateTimeField(auto_now_add=True)
+    date_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     title = models.CharField(verbose_name='Заголовок', max_length=200)
     content = models.TextField(blank=True, null=True, verbose_name="Описание героя")
     message_media = models.FileField(verbose_name='Добавление медиафайлов',
@@ -58,7 +58,7 @@ class Message(models.Model):
 
 
 class UserResponse(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор отклика')
     text = models.TextField(verbose_name='Текст')
     msg = models.TextField(default="Сообщений пока нет")
     status = models.BooleanField(default=False)
@@ -76,4 +76,5 @@ class UserResponse(models.Model):
 class Subscription(models.Model):
     """Модель подписки на обновления"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
 

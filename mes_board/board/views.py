@@ -68,8 +68,7 @@ def message_media(request):
                   {'form': form})
 
 
-class MessageCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
-    permission_required = ('board.add_message',)
+class MessageCreate(LoginRequiredMixin, CreateView):
     raise_exception = True
     form_class = CreateForm
     model = Message
@@ -109,8 +108,7 @@ class ResponseDelete(LoginRequiredMixin, DeleteView):
     success_url = '/responses/'
 
 
-class ResponseCreate(PermissionRequiredMixin, CreateView):
-    permission_required = ('board.create_response',)
+class ResponseCreate(CreateView):
     form_class = RespondForm
     model = UserResponse
     template_name = 'response_create.html'
@@ -129,16 +127,18 @@ class ResponseList(LoginRequiredMixin, ListView):
     template_name = 'responses.html'
     context_object_name = 'responses'
     paginate_by = 10
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # Здесь применяем фильтрацию
+        self.filterset = ResponseFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs  # И возвращаем отфильтрованные результаты
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
         return context
 
-    def get_queryset(self):
-        queryset = super().get_queryset().filter(add__author=self.request.user)
-        self.filterset = ResponseFilter(self.request.GET, queryset, request=self.request.user.id)
-        return self.filterset.qs
+
 
 
 # def response_accept(request, **kwargs):
@@ -180,7 +180,10 @@ class ResponseList(LoginRequiredMixin, ListView):
 
 
 def response_status_update(request, pk):
-    resp = UserResponse.objects.get(pk=pk)
-    resp.status = True
-    resp.save()
-    return redirect(reverse_lazy('responses'))
+    if request.user.is_authenticated:
+        resp = UserResponse.objects.get(pk=pk)
+        resp.status = True
+        resp.save()
+        return HttpResponseRedirect('/responses')
+    else:
+        return HttpResponseRedirect('/accounts/login')
