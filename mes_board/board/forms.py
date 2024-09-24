@@ -49,7 +49,6 @@ class CreateForm(forms.ModelForm):
         fields = [
             'title',
             'content',
-            'author',
             'message_media',
 
         ]
