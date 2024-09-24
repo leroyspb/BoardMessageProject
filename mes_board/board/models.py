@@ -11,7 +11,7 @@ class Message(models.Model):
         verbose_name="Создатель героя")
 
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    title = models.CharField(verbose_name='Заголовок', max_length=200)
+    title = models.CharField(verbose_name='Имя героя', max_length=200)
     content = models.TextField(blank=True, null=True, verbose_name="Описание героя")
     message_media = models.FileField(verbose_name='Добавление медиафайлов',
                                      upload_to='media/', blank=True, null=True)

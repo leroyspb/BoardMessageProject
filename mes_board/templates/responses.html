@@ -26,7 +26,7 @@ responses
 
         <tr>
             <td style="width: 250px">{{re.author}}</td>
-            <td style="width: 250px">{{re.content|truncatechars:20}}</td>
+            <td style="width: 250px">{{re.text|truncatechars:20}}</td>
             <td style="width: 250px">{{re.created_at}}</td>
             <td style="width: 200px"><button type="submit"><a href={% url 'response_delete' re.id%}> Удалить </a></button></td>
             {% if re.status == False %}

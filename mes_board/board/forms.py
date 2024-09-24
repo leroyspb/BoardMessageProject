@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import ModelForm
 
 from board.models import Message, UserResponse
 
@@ -82,3 +83,9 @@ class RespondForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RespondForm, self).__init__(*args, **kwargs)
         self.fields['text'].label = "Текст отклика:"
+
+
+class MediaForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = ['message_media', 'title']

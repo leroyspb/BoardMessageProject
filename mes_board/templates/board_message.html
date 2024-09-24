@@ -25,6 +25,7 @@ messages
 
 <br>
 {% for m in messages %}
+
 <br>
 <nav>
 
@@ -34,6 +35,10 @@ messages
         <a href="{% url 'message_detail' pk=m.id %}"> Прочитать полностью </a>
 
             <h3>{{ m.title|truncatewords:5 }}</h3>
+<figure class="image">
+	<img src="{{m.message_media.url}}" alt="Картинка не доступна">
+	<figcaption>Герой MMORG</figcaption>
+</figure>
         <p>{{ m.content|truncatewords:20}}</p>
         {% if not forloop.last %}
 </nav>

@@ -7,19 +7,19 @@ class MessageFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(
         field_name='title',
         lookup_expr='icontains',
-        label='Заголовок'
+        label='Имя героя'
     )
 
     category = django_filters.ChoiceFilter(
         choices=Message.CATEGORIES,
-        label='Категории',
+        label='Категория героя',
         empty_label='Выберите категорию',
     )
 
     created_at_after = django_filters.DateTimeFilter(
         field_name='date_create',
         lookup_expr='gt',
-        label='Дата',
+        label='Дата создания героя',
         widget=forms.DateTimeInput(
             format='%Y-%m-%dT%H:%M',
             attrs={'type': 'datetime-local'},

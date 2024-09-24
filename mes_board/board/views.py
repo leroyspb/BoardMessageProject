@@ -127,6 +127,7 @@ class ResponseList(LoginRequiredMixin, ListView):
     template_name = 'responses.html'
     context_object_name = 'responses'
     paginate_by = 10
+
     def get_queryset(self):
         queryset = super().get_queryset()
         # Здесь применяем фильтрацию
