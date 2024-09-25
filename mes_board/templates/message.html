@@ -8,6 +8,7 @@ messages.title
 {% block content %}
     <br><br>
         <h2>{{ messages.title }}</h2>
+	<img src="{{messages.message_media.url}}" alt="Файл не доступен">
         <span>{{ messages.content }}<br></span>
 <hr>
     <span>| Автор: {{ messages.author }}</span>

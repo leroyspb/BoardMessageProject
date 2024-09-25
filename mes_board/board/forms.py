@@ -6,7 +6,6 @@ from board.models import Message, UserResponse
 
 
 class MessageForm(forms.ModelForm):
-    text = forms.CharField(widget=CKEditorUploadingWidget())
 
     class Meta:
         model = Message
@@ -86,7 +85,3 @@ class RespondForm(forms.ModelForm):
         self.fields['text'].label = "Текст отклика:"
 
 
-class MediaForm(ModelForm):
-    class Meta:
-        model = Message
-        fields = ['message_media', 'title']

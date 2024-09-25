@@ -86,16 +86,14 @@ class MessageCreate(LoginRequiredMixin, CreateView):
         return reverse('message_list')
 
 
-class MessageUpdate(PermissionRequiredMixin, UpdateView):
-    permission_required = ('board.change_message',)
+class MessageUpdate(UpdateView):
     form_class = MessageForm
     model = Message
     template_name = 'message_edit.html'
     raise_exception = True
 
 
-class MessageDelete(PermissionRequiredMixin, DeleteView):
-    permission_required = ('board.delete_message',)
+class MessageDelete(DeleteView):
     model = Message
     template_name = 'message_delete.html'
     success_url = reverse_lazy('message_list')
