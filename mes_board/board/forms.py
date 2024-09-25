@@ -1,11 +1,12 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
-
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from board.models import Message, UserResponse
 
 
 class MessageForm(forms.ModelForm):
+    text = forms.CharField(widget=CKEditorUploadingWidget())
 
     class Meta:
         model = Message
@@ -23,7 +24,7 @@ class MessageForm(forms.ModelForm):
             'title': 'Title',
             'content': 'Content',
             'category': ' category',
-
+            'message_media': 'message_media'
         }
 
     def clean(self):
