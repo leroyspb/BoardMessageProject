@@ -6,13 +6,12 @@ from django.urls import reverse
 class Message(models.Model):
     author = models.ForeignKey(
         User,
-        related_name='message_owner',
         on_delete=models.CASCADE,
         verbose_name="Создатель героя")
 
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     title = models.CharField(verbose_name='Имя героя', max_length=200)
-    content = models.TextField(blank=True, null=True, verbose_name="Описание героя")
+    content = models.TextField(verbose_name="Описание героя")
     message_media = models.FileField(verbose_name='Добавление медиафайлов',
                                      upload_to='media/', blank=True, null=True)
 
@@ -60,9 +59,8 @@ class Message(models.Model):
 class UserResponse(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор отклика')
     text = models.TextField(verbose_name='Текст')
-    msg = models.TextField(default="Сообщений пока нет")
     status = models.BooleanField(default=False)
-    add = models.ForeignKey(Message, on_delete=models.CASCADE, null=True, blank=True)
+    add = models.ForeignKey(Message, on_delete=models.CASCADE, default=1, verbose_name='Мой герой')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата отклика')
 
     def __str__(self):
