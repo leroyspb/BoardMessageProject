@@ -33,6 +33,10 @@ class MessageFilter(django_filters.FilterSet):
 
 class ResponseFilter(django_filters.FilterSet):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.filters['add'].queryset = Message.objects.filter(author_id=kwargs['request'])
+
     class Meta:
         model = UserResponse
-        fields = ('text', 'author', 'status', )
+        fields = ('add', )

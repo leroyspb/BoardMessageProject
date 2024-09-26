@@ -126,56 +126,16 @@ class ResponseList(LoginRequiredMixin, ListView):
     context_object_name = 'responses'
     paginate_by = 10
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        # Здесь применяем фильтрацию
-        self.filterset = ResponseFilter(self.request.GET, queryset=queryset)
-        return self.filterset.qs  # И возвращаем отфильтрованные результаты
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
         return context
 
-
-
-
-# def response_accept(request, **kwargs):
-#     if request.user.is_authenticated:
-#         response = UserResponse.objects.get(id=kwargs.get('pk'))
-#         response.status = True
-#         response.save()
-#         respond_accept_send_email.delay(response_id=response.id)
-#         return HttpResponseRedirect('/responses')
-#     else:
-#         return HttpResponseRedirect('/accounts/login')
-
-
-# def response_delete(request, **kwargs):
-#     if request.user.is_authenticated:
-#         response = UserResponse.objects.get(id=kwargs.get('pk'))
-#         response.delete()
-#         return HttpResponseRedirect('/responses')
-#     else:
-#         return HttpResponseRedirect('/accounts/login')
-
-
-# class AcceptResponseView(LoginRequiredMixin, View):
-#     def post(self, request, pk):
-#         application = get_object_or_404(UserResponse, id=pk)
-#         application.accepted = True
-#         application.save()
-#
-#         # Уведомление пользователя, который оставил отклик
-#         send_notification(application.user, application)
-#
-#         messages.success(request, "Отклик принят.")
-#         return redirect('applications_list')
-
-
-# def send_notification(user, application):
-#     # Реализация уведомления
-#     pass
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(add__author=self.request.user)
+        # Здесь применяем фильтрацию
+        self.filterset = ResponseFilter(self.request.GET, queryset=queryset, request=self.request.user.id)
+        return self.filterset.qs  # И возвращаем отфильтрованные результаты
 
 
 def response_status_update(request, pk):

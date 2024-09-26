@@ -19,7 +19,7 @@ class CustomSignupForm(SignupForm):
             message=f'Пользователь {user.username} зарегистрировался на сайте.'
         )
 
-        subject = 'Добро пожаловать на наш новостной портал!'
+        subject = 'Добро пожаловать на наш игровой портал!'
         text = f'{user.username}, вы успешно зарегистрировались на сайте!'
         html = (
             f'<b>{user.username}</b>, вы успешно зарегистрировались на '
