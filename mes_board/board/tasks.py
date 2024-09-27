@@ -1,15 +1,22 @@
-import datetime
+import time
+from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.utils import timezone
 
 from celery import shared_task
+
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 
 from board.models import Message, UserResponse
 from mes_board import settings
 
+
+@shared_task
+def hello():
+    time.sleep(3)
+    print("Hello, world!")
 
 @shared_task
 def respond_send_email(respond_id):
@@ -56,7 +63,7 @@ def send_mail_monday_8am():
             send_mail(
                 subject=f'MMORPG Герои: изменения за прошедшую неделю.',
                 message=f'Доброго дня, {user.username}!\nПредлагаем Вам ознакомиться с новыми объявлениями, '
-                        f'появившимися за последние 7 дней:\n{list_messages}',
+                        f'появившимися за последние 7 дней героями:\n{list_messages}',
                 from_email='leroyspb@ya.ru',
                 recipient_list=[user.email, ],
             )

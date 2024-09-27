@@ -1,9 +1,9 @@
 from django.urls import path
 from . import views
 from .views import MessageList, MessageDetail, MessageCreate, MessageUpdate, MessageDelete, ResponseList, \
- response_status_update, ResponseCreate, ResponseDelete
-
+    response_status_update, ResponseCreate, ResponseDelete
 urlpatterns = [
+    # path('', IndexView.as_view()),
     path('', MessageList.as_view(), name='message_list'),
     path('<int:pk>', MessageDetail.as_view(), name='message_detail'),
     path('create/', MessageCreate.as_view(), name='message_create'),

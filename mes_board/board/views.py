@@ -1,3 +1,4 @@
+from celery import shared_task
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -12,7 +13,7 @@ from django.views.generic.edit import FormMixin
 from board.filters import MessageFilter, ResponseFilter
 from board.forms import MessageForm, CreateForm, RespondForm
 from board.models import Message, UserResponse
-from .tasks import respond_send_email, respond_accept_send_email
+from .tasks import respond_send_email, respond_accept_send_email, hello
 
 
 class MessageList(ListView):
@@ -138,6 +139,17 @@ class ResponseList(LoginRequiredMixin, ListView):
         return self.filterset.qs  # И возвращаем отфильтрованные результаты
 
 
+def response_accept(request, **kwargs):
+    if request.user.is_authenticated:
+        response = UserResponse.objects.get(id=kwargs.get('pk'))
+        response.status = True
+        response.save()
+        respond_accept_send_email.delay(response_id=response.id)
+        return HttpResponseRedirect('/responses')
+    else:
+        return HttpResponseRedirect('/accounts/login')
+
+
 def response_status_update(request, pk):
     if request.user.is_authenticated:
         resp = UserResponse.objects.get(pk=pk)
@@ -146,3 +158,27 @@ def response_status_update(request, pk):
         return HttpResponseRedirect('/responses')
     else:
         return HttpResponseRedirect('/accounts/login')
+
+
+class AcceptResponseView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        application = get_object_or_404(UserResponse, id=pk)
+        application.accepted = True
+        application.save()
+
+        # Уведомление пользователя, который оставил отклик
+        send_notification(application.user, application)
+
+        messages.success(request, "Отклик принят.")
+        return redirect('applications_list')
+
+
+def send_notification(user, application):
+    # Реализация уведомления
+    pass
+
+
+# class IndexView(View):
+#     def get(self, request):
+#         hello.delay()
+#         return HttpResponse('Hello!')
