@@ -29,7 +29,7 @@ messages.title
         {% elif respond == "Мое_объявление" %}
             <span style="color:red">Вы не можете откликнуться на свое объявление.</span><br>
         {% else %}
-            <a class="btn btn-secondary" href="{% url 'response_create' %}" role="button">Откликнуться</a>
+            <a class="btn btn-secondary" href="{% url 'response_create' messages.id %}" role="button">Откликнуться</a>
         {% endif %}
     {% endif %}
     <br><br>

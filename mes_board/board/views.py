@@ -116,6 +116,7 @@ class ResponseCreate(CreateView):
     def form_valid(self, form):
         response = form.save(commit=False)
         response.author = self.request.user
+        response.add_id = self.kwargs.get('pk')
         response.save()
         return super().form_valid(form)
 

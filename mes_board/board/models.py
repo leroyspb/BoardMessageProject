@@ -60,7 +60,7 @@ class UserResponse(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор отклика')
     text = models.TextField(verbose_name='Текст')
     status = models.BooleanField(default=False)
-    add = models.ForeignKey(Message, on_delete=models.CASCADE, null=True, verbose_name='Мой герой')
+    add = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Герой')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата отклика')
 
     def __str__(self):

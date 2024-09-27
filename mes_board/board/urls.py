@@ -13,7 +13,7 @@ urlpatterns = [
 
     path('responses/', ResponseList.as_view(), name='response'),
     path('response/<int:pk>/status', response_status_update, name='response_status'),
-    path('response/create/', ResponseCreate.as_view(), name='response_create'),
+    path('<int:pk>/response/create/', ResponseCreate.as_view(), name='response_create'),
     path('response/<int:pk>/delete/', ResponseDelete.as_view(), name='response_delete'),
 
 
