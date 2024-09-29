@@ -13,7 +13,6 @@ from django.views.generic.edit import FormMixin
 from board.filters import MessageFilter, ResponseFilter
 from board.forms import MessageForm, CreateForm, RespondForm
 from board.models import Message, UserResponse
-from .tasks import respond_send_email, respond_accept_send_email, hello
 
 
 class MessageList(ListView):
@@ -150,7 +149,7 @@ def response_accept(request, **kwargs):
         print(response.add_id)
         response.save()
 
-        return HttpResponseRedirect('/responses')
+        return HttpResponseRedirect('/responses/')
     else:
         return HttpResponseRedirect('/accounts/login')
 
@@ -160,14 +159,6 @@ def response_status_update(request, pk):
         resp = UserResponse.objects.get(pk=pk)
         resp.status = True
         resp.save()
-        return HttpResponseRedirect('/responses')
+        return HttpResponseRedirect('/responses/')
     else:
         return HttpResponseRedirect('/accounts/login')
-
-
-
-
-# class IndexView(View):
-#     def get(self, request):
-#         hello.delay()
-#         return HttpResponse('Hello!')

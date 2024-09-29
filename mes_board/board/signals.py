@@ -27,8 +27,8 @@ def send_mail_on_response(sender, instance, created, **kwargs):
         msg = EmailMultiAlternatives(
             subject=subject, body=text, from_email=None, to=[add.author.email]
         )
-        # responses_link = redirect('response')
-        responses_link = reverse('response')
+        responses_link = redirect('response')
+        # responses_link = reverse('response')
         html = (
             f'<b>{responder.username}</b> откликнулся на объявление "{add.title}".'
             f'Принять или удалить отклик Вы можете по <a href="{responses_link}">ссылке</a>.'

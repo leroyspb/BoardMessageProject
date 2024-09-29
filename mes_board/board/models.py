@@ -71,8 +71,3 @@ class UserResponse(models.Model):
         verbose_name_plural = 'Отклики'
 
 
-class Subscription(models.Model):
-    """Модель подписки на обновления если сделаны отклики на героя"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
