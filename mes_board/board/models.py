@@ -72,7 +72,7 @@ class UserResponse(models.Model):
 
 
 class Subscription(models.Model):
-    """Модель подписки на обновления"""
+    """Модель подписки на обновления если сделаны отклики на героя"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 

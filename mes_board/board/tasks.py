@@ -14,18 +14,40 @@ from mes_board import settings
 
 
 @shared_task
+def send_mail_monday_8am():
+    # Здесь формируем список всех героев, созданных за последние 7 дней (list_week_messages)
+    now = timezone.now()
+    list_week_messages = list(Message.objects.filter(
+        date_create__gte=now - datetime.timedelta(days=7)))
+    if list_week_messages:
+        for user in User.objects.filter():
+            print(user)
+            list_messages = ''
+            for message in list_week_messages:
+                list_messages += f'\n{message.title}\nhttp://127.0.0.1:8000/{message.id}'
+            send_mail(
+                subject=f'MMORPG Герои: изменения за прошедшую неделю.',
+                message=f'Доброго дня, {user.username}!\nПредлагаем Вам ознакомиться с новыми объявлениями, '
+                        f'появившимися за последние 7 дней героями:\n{list_messages}',
+                from_email='leroyspb@ya.ru',
+                recipient_list=[user.email, ],
+            )
+
+@shared_task
 def hello():
     time.sleep(3)
     print("Hello, world!")
 
+
 @shared_task
 def respond_send_email(respond_id):
     respond = UserResponse.objects.get(id=respond_id)
+    print(respond.message.author.email)
     send_mail(
         subject=f'Герои MMORPG : новый отклик на твоего героя!',
         message=f'Доброго дня, {respond.message.author}, ! Вашему герою присвоен новый отклик!\n'
                 f'Прочитать отклик:\nhttp://127.0.0.1:8000/responses/{respond.message.id}',
-        from_email='leroyspb@ya.ru',
+        from_email='settings.DEFAULT_FROM_EMAIL',
         recipient_list=[respond.message.author.email, ],
     )
 
@@ -48,25 +70,7 @@ def respond_send_email(respond_id):
     msg.send()
 
 
-@shared_task
-def send_mail_monday_8am():
-    # Здесь формируем список всех героев, созданных за последние 7 дней (list_week_messages)
-    now = timezone.now()
-    list_week_messages = list(Message.objects.filter(
-        date_create__gte=now - datetime.timedelta(days=7)))
-    if list_week_messages:
-        for user in User.objects.filter():
-            print(user)
-            list_messages = ''
-            for message in list_week_messages:
-                list_messages += f'\n{message.title}\nhttp://127.0.0.1:8000/{message.id}'
-            send_mail(
-                subject=f'MMORPG Герои: изменения за прошедшую неделю.',
-                message=f'Доброго дня, {user.username}!\nПредлагаем Вам ознакомиться с новыми объявлениями, '
-                        f'появившимися за последние 7 дней героями:\n{list_messages}',
-                from_email='leroyspb@ya.ru',
-                recipient_list=[user.email, ],
-            )
+
 
 
 @shared_task

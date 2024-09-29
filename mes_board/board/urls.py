@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from .views import MessageList, MessageDetail, MessageCreate, MessageUpdate, MessageDelete, ResponseList, \
     response_status_update, ResponseCreate, ResponseDelete
+
 urlpatterns = [
     # path('', IndexView.as_view()),
     path('', MessageList.as_view(), name='message_list'),
@@ -15,8 +16,6 @@ urlpatterns = [
     path('response/<int:pk>/status', response_status_update, name='response_status'),
     path('<int:pk>/response/create/', ResponseCreate.as_view(), name='response_create'),
     path('response/<int:pk>/delete/', ResponseDelete.as_view(), name='response_delete'),
-
-
 
 
 ]

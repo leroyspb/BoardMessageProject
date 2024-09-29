@@ -144,8 +144,12 @@ def response_accept(request, **kwargs):
     if request.user.is_authenticated:
         response = UserResponse.objects.get(id=kwargs.get('pk'))
         response.status = True
+        print(response.status)
+        print(response)
+        print(response.author)
+        print(response.add_id)
         response.save()
-        respond_accept_send_email.delay(response_id=response.id)
+
         return HttpResponseRedirect('/responses')
     else:
         return HttpResponseRedirect('/accounts/login')
@@ -161,22 +165,6 @@ def response_status_update(request, pk):
         return HttpResponseRedirect('/accounts/login')
 
 
-class AcceptResponseView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        application = get_object_or_404(UserResponse, id=pk)
-        application.accepted = True
-        application.save()
-
-        # Уведомление пользователя, который оставил отклик
-        send_notification(application.user, application)
-
-        messages.success(request, "Отклик принят.")
-        return redirect('applications_list')
-
-
-def send_notification(user, application):
-    # Реализация уведомления
-    pass
 
 
 # class IndexView(View):
